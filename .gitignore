@@ -1,0 +1,24 @@
+# ===== 敏感信息：真实密钥绝不进仓库 =====
+.env
+.env.local
+*.pem
+*.key
+
+# ===== Python =====
+__pycache__/
+*.pyc
+.pytest_cache/
+.coverage
+*.egg-info/
+
+# ===== 数据库（运行时产物，不入库）=====
+backend/data/*.db
+backend/data/*.db-wal
+backend/data/*.db-shm
+
+# ===== 前端 =====
+frontend/node_modules/
+frontend/dist/
+
+# ===== 日志 =====
+*.log

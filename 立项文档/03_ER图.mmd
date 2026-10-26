@@ -1,0 +1,200 @@
+erDiagram
+    PATIENT ||--o{ REG_ORDER : "挂号"
+    DEPARTMENT ||--o{ DOCTOR : "所属"
+    DEPARTMENT ||--o{ SCHEDULE : "排班科室"
+    DOCTOR ||--o{ SCHEDULE : "排班"
+    SCHEDULE ||--o{ REG_ORDER : "号源扣减"
+    REG_ORDER ||--o{ PRESCRIPTION : "就诊开方"
+    PRESCRIPTION ||--|{ PRESCRIPTION_ITEM : "包含"
+    DRUG ||--o{ PRESCRIPTION_ITEM : "被开立"
+    DRUG ||--o{ DRUG_STOCK : "批次库存"
+    PRESCRIPTION ||--o{ BILL : "药品费"
+    REG_ORDER ||--o{ BILL : "挂号费"
+    SYS_USER ||--o{ REG_ORDER : "挂号员"
+    SYS_USER ||--o{ BILL : "收费员"
+    SYS_USER ||--o{ DISPENSE_RECORD : "药师"
+    PRESCRIPTION_ITEM ||--o{ DISPENSE_RECORD : "发药明细"
+    DRUG_STOCK ||--o{ DISPENSE_RECORD : "发药批次"
+    ROLE ||--o{ SYS_USER : "拥有"
+    ROLE ||--o{ ROLE_PERMISSION : "授权"
+    PERMISSION ||--o{ ROLE_PERMISSION : "被授予"
+    SYS_USER ||--o{ AUDIT_LOG : "操作"
+
+    PATIENT {
+        int patient_id PK
+        string patient_no UK
+        string name
+        string gender
+        date birth_date
+        string id_card_masked
+        string id_card_hash UK
+        string id_card_last4
+        string phone
+        string status
+    }
+
+    DEPARTMENT {
+        int dept_id PK
+        string dept_code UK
+        string name
+        string location
+        string intro
+        string status
+    }
+
+    DOCTOR {
+        int doctor_id PK
+        string doctor_no UK
+        string name
+        string title
+        int dept_id FK
+        string specialty
+        string status
+    }
+
+    SCHEDULE {
+        int schedule_id PK
+        int doctor_id FK
+        int dept_id FK
+        date work_date
+        string time_slot
+        string reg_level
+        int fee_cents
+        int total_count
+        int remaining_count
+        string status
+        int version
+    }
+
+    REG_ORDER {
+        int reg_id PK
+        string reg_no UK
+        int patient_id FK
+        int doctor_id FK
+        int dept_id FK
+        int schedule_id FK
+        datetime reg_time
+        int queue_no
+        int fee_cents
+        string status
+        int operator_id FK
+        string cancel_reason
+    }
+
+    PRESCRIPTION {
+        int prescription_id PK
+        string prescription_no UK
+        int reg_id FK
+        int patient_id FK
+        int doctor_id FK
+        string diagnosis
+        datetime prescribe_time
+        int total_amount_cents
+        string status
+    }
+
+    PRESCRIPTION_ITEM {
+        int item_id PK
+        int prescription_id FK
+        int drug_id FK
+        int quantity
+        int unit_price_cents
+        int amount_cents
+        string dosage
+        string frequency
+        string usage_text
+        int days
+        int dispensed_quantity
+        string status
+    }
+
+    DRUG {
+        int drug_id PK
+        string drug_code UK
+        string generic_name
+        string trade_name
+        string spec
+        string dosage_form
+        string unit
+        int price_cents
+        string insurance_type
+        string status
+    }
+
+    DRUG_STOCK {
+        int stock_id PK
+        int drug_id FK
+        string batch_no
+        date production_date
+        date expiry_date
+        int quantity
+        string location
+        string status
+        int version
+    }
+
+    BILL {
+        int bill_id PK
+        string bill_no UK
+        string bill_type
+        int reg_id FK
+        int prescription_id FK
+        int patient_id FK
+        int total_amount_cents
+        string payment_method
+        int cashier_id FK
+        datetime paid_at
+        string status
+        string invoice_no
+        string request_id UK
+    }
+
+    DISPENSE_RECORD {
+        int dispense_id PK
+        int prescription_id FK
+        int item_id FK
+        int stock_id FK
+        string batch_no
+        int quantity
+        string record_type
+        int pharmacist_id FK
+        datetime dispensed_at
+    }
+
+    SYS_USER {
+        int user_id PK
+        string username UK
+        string password_hash
+        string real_name
+        int role_id FK
+        int dept_id FK
+        string status
+    }
+
+    ROLE {
+        int role_id PK
+        string role_code UK
+        string role_name
+    }
+
+    PERMISSION {
+        int permission_id PK
+        string permission_code UK
+        string permission_name
+    }
+
+    ROLE_PERMISSION {
+        int role_id PK
+        int permission_id PK
+    }
+
+    AUDIT_LOG {
+        int log_id PK
+        int user_id FK
+        string action
+        string entity
+        string entity_id
+        string detail
+        string ip
+        datetime created_at
+    }

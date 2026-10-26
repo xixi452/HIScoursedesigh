@@ -1,0 +1,39 @@
+# CI 流水线：每次 push / PR 自动跑后端 pytest + 前端构建
+# 测试不通过 → 不触发部署（坏代码被挡在门外）
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+      - name: 运行 pytest
+        run: pytest -q
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: 安装依赖
+        run: npm install
+      - name: 构建前端
+        run: npm run build

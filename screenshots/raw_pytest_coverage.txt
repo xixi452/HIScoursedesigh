@@ -1,0 +1,32 @@
+..................................................                       [100%]
+============================== warnings summary ===============================
+tests/test_api.py::TestLogin::test_login_success
+  C:\Users\tianxiaoxuan\AppData\Local\Programs\Python\Python310\lib\site-packages\fastapi\testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+tests/test_api.py::TestLogin::test_login_success
+  C:\Users\tianxiaoxuan\AppData\Local\Programs\Python\Python310\lib\site-packages\starlette\testclient.py:53: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+_______________ coverage: platform win32, python 3.10.9-final-0 _______________
+
+Name                       Stmts   Miss  Cover
+----------------------------------------------
+main.py                       57      1    98%
+routers\__init__.py            0      0   100%
+routers\auth.py               27      0   100%
+routers\dispense.py           40     10    75%
+routers\payment.py            93     25    73%
+routers\prescription.py       70     19    73%
+routers\query.py              18      5    72%
+routers\registration.py       52      9    83%
+schemas.py                    26      0   100%
+security.py                   65      6    91%
+services\__init__.py           0      0   100%
+services\inventory.py         17      1    94%
+services\pricing.py            8      0   100%
+services\registration.py       6      0   100%
+----------------------------------------------
+TOTAL                        479     76    84%

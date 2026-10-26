@@ -1,0 +1,29 @@
+# 一条命令拉起前端 + 后端 + 数据库（SQLite 卷持久化）
+# 用法：docker compose up --build
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      # 真实密钥请用 .env 传入，勿写死在这里
+      - HIS_JWT_SECRET=${HIS_JWT_SECRET:-dev-only-change-me-32-bytes-minimum}
+      - HIS_ID_SALT=${HIS_ID_SALT:-his-mvp-id-salt}
+    volumes:
+      - his_data:/app/backend/data   # SQLite 数据持久化
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        VITE_API_BASE: http://localhost:8000
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  his_data:
